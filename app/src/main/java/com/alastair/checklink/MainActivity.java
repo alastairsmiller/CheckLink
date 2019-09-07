@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
                             //System.out.println("Starting Service ");
                             Intent theIntent = new Intent(MainActivity.this, CheckLinkService.class);
                             startForegroundService(theIntent);
-                            show_Notification();
                         }
                     });
 

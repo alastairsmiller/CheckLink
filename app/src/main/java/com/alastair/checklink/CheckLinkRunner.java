@@ -1,6 +1,10 @@
 package com.alastair.checklink;
 
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -39,6 +43,7 @@ public class CheckLinkRunner implements Callable<String> {
     public String call(){
         //setContentView(R.layout.activity_main);
         LinkState currState = LinkState.UNKNOWN;
+        show_Notification();
         try {
             int i = 0;
             while (!shutdown) {
@@ -58,7 +63,28 @@ public class CheckLinkRunner implements Callable<String> {
         return("");
 
     }
-/**
+
+    public void show_Notification(){
+
+        Intent intent=new Intent(theContext.getApplicationContext(),MainActivity.class);
+        String CHANNEL_ID="MYCHANNEL";
+        NotificationChannel notificationChannel=new NotificationChannel(CHANNEL_ID,"name", NotificationManager.IMPORTANCE_LOW);
+        PendingIntent pendingIntent=PendingIntent.getActivity(theContext.getApplicationContext(),1,intent,0);
+        Notification notification=new Notification.Builder(theContext.getApplicationContext(),CHANNEL_ID)
+                .setContentText("CheckLink")
+                .setContentTitle("asm")
+                .setContentIntent(pendingIntent)
+                .addAction(android.R.drawable.sym_action_chat,"Title",pendingIntent)
+                .setChannelId(CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.sym_action_chat)
+                .build();
+
+        NotificationManager notificationManager=(NotificationManager) theContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.createNotificationChannel(notificationChannel);
+        notificationManager.notify(1,notification);
+    }
+
+    /**
     public boolean sendFileToDropBox() {
         final String APP_KEY = "uqd8r5y042cvdt5";
         final String APP_SECRET = "8jw0rlw1hts2bf6";
